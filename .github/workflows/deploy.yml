@@ -27,12 +27,32 @@ jobs:
       - name: Build
         run: npm run build
         
-      - name: Copy folder content recursively to remote
+      - name: Copy folder content recursively to remote (dev)
         if: github.ref == 'refs/heads/dev'
         uses: garygrossgarten/github-action-scp@release
         with:
           local: "build"
           remote: "/var/www/html"
           host: "18.230.139.57"
+          username: "ec2-user"
+          privateKey: ${{ secrets.RSA_PRIV_KEY }}
+
+      - name: Copy folder content recursively to remote (stage)
+        if: github.ref == 'refs/heads/stage'
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: "build"
+          remote: "/var/www/html"
+          host: "15.228.245.156"
+          username: "ec2-user"
+          privateKey: ${{ secrets.RSA_PRIV_KEY }}
+
+      - name: Copy folder content recursively to remote (prod)
+        if: github.ref == 'refs/heads/prod'
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: "build"
+          remote: "/var/www/html"
+          host: "18.229.162.149"
           username: "ec2-user"
           privateKey: ${{ secrets.RSA_PRIV_KEY }}
